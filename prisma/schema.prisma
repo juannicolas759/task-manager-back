@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  user_id       Int             @id @default(autoincrement())
+  first_name    String          @db.VarChar(120)
+  last_name     String          @db.VarChar(120)
+  email         String          @unique @db.VarChar(120)
+  user_password String          @db.VarChar(85)
+  user_state    String          @db.Char(1)
+  employees         users[]         @relation("employees")
+  manager_id    Int?
+  employee          users?          @relation(name: "employees", fields: [manager_id], references: [user_id])
+  history_tasks history_tasks[]
+}
+
+model tasks {
+  task_id          Int             @id @default(autoincrement())
+  description_task String          @db.VarChar(255)
+  type_task        String          @db.Char(2)
+  creation_date    DateTime        @default(now()) @db.Timestamp(0)
+  guess_end_date   DateTime?       @default(now()) @db.Timestamp(0)
+  history_tasks    history_tasks[]
+}
+
+model states {
+  state_id      Int             @id @default(autoincrement())
+  state_name    String          @db.VarChar(20)
+  is_active     Boolean         @default(true)
+  history_tasks history_tasks[]
+}
+
+model history_tasks {
+  user        users    @relation(fields: [user_id], references: [user_id])
+  user_id     Int
+  task        tasks    @relation(fields: [task_id], references: [task_id])
+  task_id     Int
+  state       states   @relation(fields: [state_id], references: [state_id])
+  state_id    Int
+  change_date DateTime @default(now()) @db.Timestamp(0)
+
+  @@id([user_id, task_id, state_id])
+}
