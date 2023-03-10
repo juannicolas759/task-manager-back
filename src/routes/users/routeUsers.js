@@ -11,3 +11,5 @@ router.post('/createUser')
 router.put('/updateUser')
 
 router.put('/deleteUser')
+
+module.exports = router

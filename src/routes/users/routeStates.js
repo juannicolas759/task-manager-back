@@ -10,3 +10,4 @@ router.put('/updateState')
 
 router.put('/deleteState')
 
+module.exports = router

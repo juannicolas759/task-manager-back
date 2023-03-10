@@ -9,3 +9,5 @@ router.post('/createTask')
 router.put('/updateTask')
 
 router.put('/deleteTask')
+
+module.exports = router
