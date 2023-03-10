@@ -2,13 +2,13 @@ const {Router} = require("express")
 const router = Router()
 const verificationUser = Router()
 const jwt = require('jsonwebtoken')
-const {loginUser} = require("../controller/controllerAuthentication")
+const {loginUser} = require("../controllers/controllerAuthentication")
 
 
 router.post('/login', loginUser)
 
-router.use('/api',require('./users/'))
-
+router.use('/users',require('./users/routeUsers')) 
+router.use('/tasks',require('./users/routeTasks'))
 
 verificationUser.use((req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization']
@@ -36,3 +36,5 @@ verificationUser.use((req, res, next) => {
         })
     }
 })
+
+module.exports = router

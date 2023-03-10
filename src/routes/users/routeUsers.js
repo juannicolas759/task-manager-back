@@ -1,12 +1,13 @@
 const router = require('express').Router()
+const {getUsers, createUsers, getUserById} = require('../../controllers/controllerUsers') 
 
-router.get('/getUsers')
+router.get('/getUsers', getUsers)
 
-router.get('/getUserByState')
+router.get('/getUserByState', )
 
-router.get('/getUserById')
+router.get('/getUserById', getUserById)
 
-router.post('/createUser')
+router.post('/createUser', createUsers)  
 
 router.put('/updateUser')
 
