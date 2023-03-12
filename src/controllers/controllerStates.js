@@ -94,7 +94,7 @@ const updateState = async (req, res) => {
             }
         })
         res.send({
-            message: "estado creado con éxito"
+            message: "estado actualizado con éxito"
         });
     } catch (error) {
         res.status(400).send({
