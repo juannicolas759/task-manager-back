@@ -1,11 +1,127 @@
-const getTask = (req, res) => { }
+const { PrismaClient } = require("@prisma/client")
+const prisma = new PrismaClient()
+const jwt = require('jsonwebtoken')
 
-const createTask = (req, res) => { }
+const getTasks = async (req, res) => { 
+    try {
+        const data = await prisma.tasks.findMany({
+        })
+        if (data[0] === undefined) {
+            res.status(400).send({
+                message: "No se encuentra los datos solicitados"
+            })
+        } else {
+            res.json(data)
+        }
+    } catch (error) {
+        res.send({
+            message: "Ocurrió un error al momento obtener las tareas"
+        })
+        console.log(error)
+    }
+}
 
-const getTasks = (req, res) => { }
+const getTaskById = async (req, res) => { 
+    try {
+        const data = await prisma.tasks.findUnique({
+            where: {
+                task_id: req.body.task_id
+            }
+        })
+        console.log(data);
+        if (data === null) {
+            res.status(400).send({
+                message: "No se encuentra los datos solicitados"
+            })
+        } else {
+            res.json(data)
+        }
+    } catch (error) {
+        res.send({
+            message: "Ocurrió un error al momento obtener las tareas"
+        })
+        console.log(error)
+    }
+}
 
-const updateTask = (req, res) => { }
+const createTask = async (req, res) => {
+    try {
+        const task = await prisma.tasks.create({
+            data: {
+                description_task: req.body.description_task,
+                type_task: req.body.type_task,
+                creation_date: new Date (req.body.creation_date),
+                guess_end_date: new Date (req.body.guess_end_date)
+            }
+        })
 
-const deleteTask = (req, res) => { }
+        res.send({
+            message: "tarea creada con éxito"
+        });
+    } catch (error) {
+        res.status(400).send({
+            message: "Ocurrió el error al momento de crear una tarea"
+        });
+        console.log(error)
+    }
 
-module.exports = { getTask, createTask, getTasks, updateTask, deleteTask }
+}
+
+const updateTask = async (req, res) => { 
+    try {
+        const task = await prisma.tasks.update({
+            where: {
+                task_id: req.body.task_id
+            },
+            data: {
+                description_task: req.body.description_task,
+                type_task: req.body.type_task,
+                creation_date: new Date(req.body.creation_date),
+                guess_end_date: new Date (req.body.guess_end_date)
+            }
+        })
+        console.log("Se actualizo la tarea con el id " + task.task_id)
+        res.send({
+            message: "tarea actualizada con éxito."
+        });
+    } catch (error) {
+        if (error.code === undefined) {
+            res.status(400).send({
+                message: "Ocurrió un error al actualizar la tarea"
+            })
+        } else {
+            res.status(400).send({
+                message: "Ocurrió un error al actualizar la tarea"
+            })
+        }
+        console.log(error)
+    }
+
+}
+
+const deleteTask = async (req, res) => {
+    try {
+        const task = await prisma.tasks.delete({
+            where: {
+                task_id: req.body.task_id
+            },
+        })
+        console.log("Se eliminó la persona con el id " + task.task_id)
+        res.send({
+            message: "tarea borrada con éxito."
+        });
+    } catch (error) {
+        if (error.code === undefined) {
+            res.status(400).send({
+                message: "Ocurrió un error al eliminar la tarea"
+            })
+        } else {
+            res.status(400).send({
+                message: "Ocurrió un error al eliminar la tarea"
+            })
+        }
+        console.log(error)
+    }
+ }
+
+module.exports = { getTaskById, createTask, getTasks, updateTask, deleteTask }
