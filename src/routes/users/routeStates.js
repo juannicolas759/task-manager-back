@@ -1,13 +1,17 @@
+const { getStates, getActiveStates, createState, updateState, deleteState, getStateById } = require('../../controllers/controllerStates')
+
 const router = require('express').Router()
 
-router.get('/getStates')
+router.get('/getStates', getStates)
 
-router.get('/getActiveStates')
+router.get('/getActiveStates', getActiveStates)
 
-router.post('/createState')
+router.get('/getStatesById', getStateById)
 
-router.put('/updateState')
+router.post('/createState', createState)
 
-router.patch('/deleteState')
+router.put('/updateState', updateState)
+
+router.patch('/deleteState', deleteState)
 
 module.exports = router
