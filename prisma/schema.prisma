@@ -40,9 +40,9 @@ model states {
 }
 
 model history_tasks {
-  user        users    @relation(fields: [user_id], references: [user_id])
+  user        users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   user_id     Int
-  task        tasks    @relation(fields: [task_id], references: [task_id])
+  task        tasks    @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
   task_id     Int
   state       states   @relation(fields: [state_id], references: [state_id])
   state_id    Int
