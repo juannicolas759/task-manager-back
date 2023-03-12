@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
-const { encrypt, compare } = require('../utils/handleBcrypt')
+const { encrypt } = require('../utils/handleBcrypt')
 const jwt = require('jsonwebtoken')
 
 
@@ -91,7 +91,7 @@ const createUsers = async (req, res) => {
         });
     } catch (error) {
         res.status(400).send({
-            message: "Ocurrió el error al momento de crear el users"
+            message: "Ocurrió el error al momento de crear el usuario"
         });
         console.log(error)
     }
@@ -110,12 +110,11 @@ const updateUsers = async (req, res) => {
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 email: req.body.email,
-                user_password: req.body.user_password,
                 user_state: req.body.user_state,
                 manager_id: req.body.manager_id
             }
         })
-        createAudit(req, res, "Se actualizo la persona con el id " + user.user_id)
+        console.log("Se actualizo la persona con el id " + user.user_id)
         res.send({
             message: "Persona actualizada con éxito."
         });
@@ -145,7 +144,7 @@ const deleteUser = async (req, res) => {
                 user_state: "I",
             }
         })
-        createAudit(req, res, "Se eliminó la persona con el id " + user.user_id)
+        console.log("Se eliminó la persona con el id " + user.user_id)
         res.send({
             message: "Persona borrada con éxito."
         });
