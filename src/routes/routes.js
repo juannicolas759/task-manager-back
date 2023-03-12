@@ -9,6 +9,8 @@ router.post('/login', loginUser)
 
 router.use('/users',require('./users/routeUsers')) 
 router.use('/tasks',require('./users/routeTasks'))
+router.use('/states',require('./users/routeStates'))
+router.use('/historyTasks',require('./users/routeHistoryTasks'))
 
 verificationUser.use((req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization']
