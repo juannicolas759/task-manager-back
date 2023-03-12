@@ -8,6 +8,6 @@ router.post('/createState')
 
 router.put('/updateState')
 
-router.put('/deleteState')
+router.patch('/deleteState')
 
 module.exports = router

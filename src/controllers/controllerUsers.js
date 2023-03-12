@@ -52,7 +52,7 @@ const getUserById = async (req, res) => {
 
 const getUserByState = async (req, res) => {
     try {
-        const data = await prisma.users.findUnique({
+        const data = await prisma.users.findMany({
             where: {
                 user_state: req.body.user_state
             }
