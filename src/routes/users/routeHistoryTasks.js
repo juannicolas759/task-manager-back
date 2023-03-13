@@ -1,4 +1,4 @@
-const { getLastPositionTask, assignHistoryTask, getHisTasksByUser, registerHistoryTask, getHistoryTasks } = require('../../controllers/controllerHistoryTasks')
+const { getLastPositionTask, assignHistoryTask, getHisTasksByUser, registerHistoryTask, getHistoryTasks, filterByDateRange, getHisTasksByTask } = require('../../controllers/controllerHistoryTasks')
 
 const router = require('express').Router()
 
@@ -12,5 +12,8 @@ router.get('/getHisTasksByUser', getHisTasksByUser)
 
 router.get('/getLastPositionTask', getLastPositionTask)
 
+router.get('/getfilterByDateRange', filterByDateRange)
+
+router.get('/getHistoryTaskByTask', getHisTasksByTask)
 
 module.exports = router
