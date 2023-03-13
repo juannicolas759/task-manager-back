@@ -17,9 +17,9 @@ model users {
   email         String          @unique @db.VarChar(120)
   user_password String          @db.VarChar(85)
   user_state    String          @db.Char(1)
-  employees         users[]         @relation("employees")
+  employees     users[]         @relation("employees")
   manager_id    Int?
-  employee          users?          @relation(name: "employees", fields: [manager_id], references: [user_id])
+  employee      users?          @relation(name: "employees", fields: [manager_id], references: [user_id])
   history_tasks history_tasks[]
 }
 
@@ -40,13 +40,12 @@ model states {
 }
 
 model history_tasks {
-  user        users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  user_id     Int
-  task        tasks    @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
-  task_id     Int
-  state       states   @relation(fields: [state_id], references: [state_id])
-  state_id    Int
-  change_date DateTime @default(now()) @db.Timestamp(0)
-
-  @@id([user_id, task_id, state_id])
+  history_task_id Int      @id @default(autoincrement())
+  user            users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  user_id         Int
+  task            tasks    @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
+  task_id         Int
+  state           states   @relation(fields: [state_id], references: [state_id])
+  state_id        Int
+  change_date     DateTime @default(now()) @db.Timestamp(0)
 }

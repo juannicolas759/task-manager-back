@@ -163,4 +163,71 @@ const deleteUser = async (req, res) => {
 
 }
 
-module.exports = { getUsers, createUsers, getUserById, updateUsers, deleteUser, getUserByState }
+const getUserTasks = async (req, res) => {
+    try {
+        const data = await prisma.users.findMany({
+            where: {
+                user_id: req.body.user_id
+            },
+            include: {
+                history_tasks: {
+                    orderBy: {
+                        change_date: 'desc',
+                    },
+                    distinct: ['task_id']
+                }
+            }
+        })
+        if (data[0] === undefined) {
+            res.status(400).send({
+                message: "No se encuentra los datos solicitados"
+            })
+        } else {
+            res.json(data)
+        }
+    } catch (error) {
+        res.send({
+            message: "Ocurrió un error al momento obtener los usuarios"
+        })
+        console.log(error)
+    }
+}
+
+const getUserTasksByState = async (req, res) => {
+    try {
+        const data = await prisma.users.findMany({
+            where: {
+                user_id: req.body.user_id
+            },
+            include: {
+                history_tasks: {
+                    where:{
+                        state_id: req.body.state_id
+                    },
+                    orderBy: {
+                        change_date: 'desc',
+                    },
+                    distinct: ['task_id']
+                }
+            }
+        })
+        if (data[0] === undefined) {
+            res.status(400).send({
+                message: "No se encuentra los datos solicitados"
+            })
+        } else {
+            res.json(data)
+        }
+    } catch (error) {
+        res.send({
+            message: "Ocurrió un error al momento obtener los usuarios"
+        })
+        console.log(error)
+    }
+}
+
+module.exports = {
+    getUsers, createUsers, getUserById,
+    updateUsers, deleteUser, getUserByState, getUserTasks,
+    getUserTasksByState
+}

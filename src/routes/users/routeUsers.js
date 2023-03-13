@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {getUsers, createUsers, getUserById, updateUsers, deleteUser, getUserByState} = require('../../controllers/controllerUsers') 
+const {getUsers, createUsers, getUserById, updateUsers, deleteUser, getUserByState, getUserTasks, getUserTasksByState} = require('../../controllers/controllerUsers') 
 
 router.get('/getUsers', getUsers)
 
@@ -12,5 +12,9 @@ router.post('/createUser', createUsers)
 router.put('/updateUser',updateUsers)
 
 router.put('/deleteUser', deleteUser)
+
+router.get('/getUserTasks', getUserTasks)
+
+router.get('/getUserTasksByState', getUserTasksByState)
 
 module.exports = router
