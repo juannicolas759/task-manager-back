@@ -6,10 +6,12 @@ const jwt = require('jsonwebtoken')
 const loginUser = async (req, res) => {
     try{
         const user =  req.body.email
-        const password = req.body.password_account
-        const verify = await prisma.accounts.findMany({
+        const password = req.body.user_password
+        const verify = await prisma.users.findMany({
             where:{
-                EMAIL: user 
+                email: user,
+                user_password: password,
+                user_state: "A"
             }
         })
         if(verify.length === 0){
@@ -17,57 +19,9 @@ const loginUser = async (req, res) => {
                 message : "email o contraseña incorrecta"
             })
         }else{
-            const validate = await compare(password, verify[0].PASSWORD_ACCOUNT)
+            const validate = await compare(password, verify[0].user_password)
             if(validate){
-                const person = await prisma.persons.findUnique({
-                    where:{
-                        ID_PERSON: verify[0].ID_PERSON
-                    },
-                    include:{
-                        user_roles:{
-                            include:{
-                                roles: true
-                            }
-                        }, 
-                        person_dependencies:{
-                            include:{
-                                dependencies:true
-                            }
-                        }
-                    }
-                })
-                const object = [
-                    {
-                        ID_ACCOUNTS : verify[0].ID_ACCOUNTS,
-                        EMAIL : verify[0].EMAIL,
-                        PASSWORD_ACCOUNT : verify[0].PASSWORD_ACCOUNT,
-                        STATE : verify[0].STATE,
-                        ID_PERSON : verify[0].ID_PERSON,
-                        NAME_ROL: person.user_roles[0].roles.NAME_ROL,
-                        DEPENDECIES:[],
-                        ROLES:[]
-                        
-                    }
-                ]
-                let arrayAux =[]
-                person.person_dependencies.map((dependencie)=>{
-                    arrayAux.push({
-                        ID_DEPENDECIE:dependencie.dependencies.ID_DEPENDENCIE,
-                        DEPENDECIE_NAME:dependencie.dependencies.DEPENDENCIE_NAME,
-                        DEPENDECIE_TYPE:dependencie.dependencies.TYPE_DEPENDENCIE
-                    })
-                })
-                object[0].DEPENDECIES = arrayAux
-                let arrayAuxRoles =[]
-                person.user_roles.map((rol)=>{
-                    arrayAuxRoles.push({
-                        ID_ROL:rol.roles.ID_ROL,
-                        NAME_ROL:rol.roles.NAME_ROL
-                    })
-                })
-                object[0].ROLES = arrayAuxRoles
-                console.log(object)
-                jwt.sign({object},object[0].NAME_ROL,(error,token)=>{
+                jwt.sign({verify}, "secretWord",(error,token)=>{
                     console.log(parseJwt(token))
                     res.json({
                         token: token
@@ -91,6 +45,10 @@ const loginUser = async (req, res) => {
         }
         console.log(error)
     }    
+}
+
+function parseJwt (token) {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
 }
 
 module.exports = {

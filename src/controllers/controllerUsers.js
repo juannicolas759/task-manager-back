@@ -226,8 +226,39 @@ const getUserTasksByState = async (req, res) => {
     }
 }
 
+const getManager = async (req, res) => {
+    try {
+        const data = await prisma.users.findMany({
+            where: {
+                manager_id: null,
+                user_state: "A"
+            },
+            include: {
+                employees: {
+                    where: {
+                        user_state: "A"
+                    }
+                }
+            }
+        })
+        if (data[0] === undefined) {
+            res.status(400).send({
+                message: "No se encuentra los datos solicitados"
+            })
+        } else {
+            res.json(data)
+        }
+    } catch (error) {
+        res.send({
+            message: "Ocurrió un error al momento obtener los usuarios"
+        })
+        console.log(error)
+    }
+}
+
+
 module.exports = {
     getUsers, createUsers, getUserById,
     updateUsers, deleteUser, getUserByState, getUserTasks,
-    getUserTasksByState
+    getUserTasksByState, getManager
 }
