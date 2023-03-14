@@ -4,12 +4,12 @@ const router = require('express').Router()
 
 router.get('/getTasks', getTasks)
 
-router.get('/getTaskByState', getTaskById)
+router.get('/getTaskById/:id', getTaskById)
 
 router.post('/createTask', createTask)
 
 router.put('/updateTask', updateTask)
 
-router.delete('/deleteTask', deleteTask)
+router.delete('/deleteTask/:id', deleteTask)
 
 module.exports = router

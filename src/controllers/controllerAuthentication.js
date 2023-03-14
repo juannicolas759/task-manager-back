@@ -10,7 +10,6 @@ const loginUser = async (req, res) => {
         const verify = await prisma.users.findMany({
             where:{
                 email: user,
-                user_password: password,
                 user_state: "A"
             }
         })
@@ -24,6 +23,7 @@ const loginUser = async (req, res) => {
                 jwt.sign({verify}, "secretWord",(error,token)=>{
                     console.log(parseJwt(token))
                     res.json({
+                        user: verify,
                         token: token
                     })
                 })

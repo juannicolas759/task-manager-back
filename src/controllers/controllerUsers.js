@@ -28,10 +28,12 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
+    const { id } = req.params
+    console.log("parametros",{ id });
     try {
         const data = await prisma.users.findUnique({
             where: {
-                user_id: req.body.user_id
+                user_id: Number(req.params.id)
             }
         })
         console.log(data);
@@ -51,10 +53,11 @@ const getUserById = async (req, res) => {
 }
 
 const getUserByState = async (req, res) => {
+    console.log(req.body.user_state)
     try {
         const data = await prisma.users.findMany({
             where: {
-                user_state: req.body.user_state
+                user_state: "A"
             }
         })
         console.log(data);

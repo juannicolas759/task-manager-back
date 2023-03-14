@@ -7,7 +7,7 @@ const {loginUser} = require("../controllers/controllerAuthentication")
 
 router.post('/login', loginUser)
 
-router.use('/users',require('./users/routeUsers')) 
+router.use('/users', require('./users/routeUsers')) 
 router.use('/tasks',require('./users/routeTasks'))
 router.use('/states',require('./users/routeStates'))
 router.use('/historyTasks',require('./users/routeHistoryTasks'))
@@ -26,7 +26,7 @@ verificationUser.use((req, res, next) => {
         token = aux[1]
     }
     if(token){
-        jwt.verify(token, 'Usuario', (error, token) => {
+        jwt.verify(token, 'secretWord', (error, token) => {
             if(error){
                 return res.json({
                     message: 'El token no es valido'

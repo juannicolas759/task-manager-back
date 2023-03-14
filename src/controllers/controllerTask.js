@@ -22,10 +22,11 @@ const getTasks = async (req, res) => {
 }
 
 const getTaskById = async (req, res) => { 
+    const { id } = req.params
     try {
         const data = await prisma.tasks.findUnique({
             where: {
-                task_id: req.body.task_id
+                task_id: Number(req.params.id)
             }
         })
         console.log(data);
@@ -100,10 +101,11 @@ const updateTask = async (req, res) => {
 }
 
 const deleteTask = async (req, res) => {
+    const { id } = req.params
     try {
         const task = await prisma.tasks.delete({
             where: {
-                task_id: req.body.task_id
+                task_id: Number(req.params.id)
             },
         })
         console.log("Se eliminó la persona con el id " + task.task_id)

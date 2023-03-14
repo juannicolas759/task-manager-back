@@ -5,7 +5,7 @@ router.get('/getUsers', getUsers)
 
 router.get('/getUserByState', getUserByState)
 
-router.get('/getUserById', getUserById)
+router.get('/getUserById/:id', getUserById)
 
 router.post('/createUser', createUsers)  
 
